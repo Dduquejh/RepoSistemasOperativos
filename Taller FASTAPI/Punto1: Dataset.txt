@@ -1,0 +1,1 @@
+Se selecciona el dataset del siguiente link https://www.kaggle.com/datasets/sergioagudelo/phishing-url-detection, por temas del tamaño del csv y del zip correspondiente se comparte el link de donde se obtuvo el dataset. Tanto el zip como el csv se agregan a un gitignore
