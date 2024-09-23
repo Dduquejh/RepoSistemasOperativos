@@ -1,0 +1,11 @@
+Se agrega inicialmente en el archivo de requirements.txt las librerias de pydantic (para crear los modelos) y de python-dotenv (para cargar el .env)
+Además, se crea el archivo SQL CleanDatabase.sql para eliminar todos los registros que tienen datos nulos.
+
+De ahí se crea un archivo .env para configurar el url de la base de datos que luego será llamado en el main.py
+
+En el main.py, inicialmente se crean 2 clases que establecen un modelo de respuesta de la base de datos. Luego de esto se carga el archivo .env y se obtiene el link de la base de datos
+Luego de esto se crea una función que establece la conexión con la base de datos que es llamado por otro para decidir que hacer cuando se inicia y otro que decide que hacer cuando se finaliza.
+
+De ahí se tiene el endpoint GET creado que devuelve por páginas y en un máximo de 100 datos los elementos que se crean en una de las clases de los modelos creados.
+
+Para correr el programa de FastAPI, en la terminal teniendo el entorno virtual activo y en la terminal en el mismo directorio se ejecuta: uvicorn main:app --reload y en un navegador se accede al link: http://127.0.0.1:8000/docs para cargar el Swagger y poder trabajar de forma más sencilla con los endpoints 
