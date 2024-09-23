@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres-so
+    environment:
+      POSTGRES_USER: dduquejh
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: SO
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_so:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-so
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data_so: {}
