@@ -1,0 +1,15 @@
+[Unit]
+Description=FastApi service
+After=Network.target
+
+[Service]
+User=juanda       # Aqui va el nombre de usuario de WSL
+Group=juanda      # Aqui el grupo, el cual generalmente es el mismo nombre de usuario
+WorkingDirectory=/home/juanda/RepoSistemasOperativos/Taller FASTAPI   # Ruta del proyecto de FastApi
+ExecStart=/home/juanda/RepoSistemasOperativos/Taller\ FASTAPI/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 #Puertos donde se ejecuta
+
+Restart=always
+RestarSec=3
+
+[Install]
+WantedBy=multi-user.target

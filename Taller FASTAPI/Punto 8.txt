@@ -1,0 +1,19 @@
+Para crear el servicio y que se levante cada vez que se ejecute WSL, se siguen los pasos: 
+
+1. Se crea el archivo fastapi_prueba.service que contiene la lógica del servicio.
+2. Se habilita systemd en WSL:
+    2.1. Se debe contar con WSL 2
+    2.2. Correr en WSL sudo nano /etc/wsl.conf
+    2.3. Copiar
+        [boot]
+        systemd=true
+    2.4. Correr en powershell wsl --shutdown
+    2.5. Verificar en Linux corriendo: systemctl list-units --type=service (debe aparecer systemd)
+3. Ejecutar sudo nano /etc/systemd/system/fastapi_prueba.service
+4. Agregar el contenido del archivo fastapi_prueba.service 
+5. Recargar y rehabilitar el servicio con el código: sudo systemctl daemon-reload
+6. Iniciar el servicio: sudo systemctl start fastapi_prueba.service
+7. Habilitar el servicio: sudo systemctl enable fastapi_prueba.service
+8. Verificar el estado del servicio: sudo systemctl status fastapi_prueba.service
+
+Si todo esta bien deberias poder acceder desde http://localhost:8000/docs. Es importante aclarar que para acceder debes de iniciar el docker para que funcione correctamente. 

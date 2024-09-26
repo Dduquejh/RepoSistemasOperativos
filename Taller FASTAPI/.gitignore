@@ -1,0 +1,6 @@
+*.csv
+*.zip
+*.env
+__pycache__/
+Taller FASTAPI/venv
+out.csv:Zone.Identifier
