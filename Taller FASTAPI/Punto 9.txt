@@ -1,0 +1,14 @@
+Se puede instalar ngrok en Linux usando: 
+ curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list && sudo apt update && sudo apt install ngrok
+
+Luego se crea una cuenta en ngrok, para obtener el authtoken, el cual se debe correr en la terminal de la siguiente manera: 
+ngrok config add-authtoken <Aquí tu token>
+
+finalmente correr el comando 
+ngrok http 8000  (Se puede cambiar 8000 por el puerto donde este corriendo la aplicación)
+Esto generará un link que apunta a dicho puerto del host:
+
+Forwarding                    http://<subdominio>.ngrok-free.app -> http://localhost:8000
+
+De esta manera se puede acceder a la api e incluso realizar accionas como get y post.
+NOTA: al ingresar al link es necesario añadir a la url /docs, para entrar en la interfaz de swagger. 
