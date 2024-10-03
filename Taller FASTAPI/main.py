@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import asyncpg
 import os
 from dotenv import load_dotenv
-from typing import List
+from typing import List, Optional
 
 class Dataset(BaseModel):
     url: str
@@ -63,9 +63,10 @@ async def shutdown_event():
 
 # Ruta para obtener los datos del dataset
 @app.get("/dataset", response_model=ResponseModel)
-async def read_dataset(page: int = Query(1, ge=1), limit: int = Query(1, le=100)):
+async def read_dataset(page: int = Query(1, ge=1), limit: int = Query(1, le=100), age_days: Optional[float] = Query(None, ge=0)):
     try:
         offset = (page - 1) * limit
+
         rows = await app.state.db.fetch(f"""
             SELECT url, label, url_length, domain_has_digits, domain_age_days 
             FROM dataset_phishing 
@@ -75,6 +76,16 @@ async def read_dataset(page: int = Query(1, ge=1), limit: int = Query(1, le=100)
         # Se lanza cuando no se encuentran registros
         if not rows:
                 raise HTTPException(status_code=404, detail="No records found")
+
+        # Si se proporciona age_days
+        if age_days is not None:
+            if age_days < 0:
+                raise HTTPException(status_code=422, detail="age_days must be greater than 0")
+            rows = [row for row in rows if row['domain_age_days'] > age_days]
+
+        # Se lanza cuando no se encuentran registros después del filtro
+        if not rows:
+                raise HTTPException(status_code=404, detail="No records found after applying the age_days filter")
 
         return ResponseModel(
             data=[Dataset(**row) for row in rows],
@@ -137,6 +148,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     return JSONResponse(
         status_code=422,
         content={
-            "detail": "Faltan campos en el request body",
+            "detail": "Error campos en el request body",
         },
     )

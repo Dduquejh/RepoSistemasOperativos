@@ -3,11 +3,16 @@ import requests
 BASE_URL = "http://127.0.0.1:8000"
 
 # Verificar endpoint GET /dataset
-def test_get_dataset(page, limit):
+def test_get_dataset(page, limit, age_days=None):
     url = f"{BASE_URL}/dataset?page={page}&limit={limit}"
+
+    # Agregar el parámetro age_days a la URL si se proporciona
+    if age_days is not None:
+        url += f"&age_days={age_days}"
+
     response = requests.get(url)
 
-    print(f"STATUS: GET /dataset?page={page}&limit={limit} - Status Code: {response.status_code}")
+    print(f"STATUS: GET /dataset?page={page}&limit={limit}{'&age_days=' + str(age_days) if age_days is not None else ''} - Status Code: {response.status_code}")
 
     if response.status_code == 200:
         print("GET /dataset: OK")
@@ -52,6 +57,18 @@ def run_test():
     # No hay página -1 y el máximo de registros es 100
     print("Con errores en el request body")
     test_get_dataset(-1, 200) 
+
+    # Test GET /dataset con filtro age_days
+    print("Correcto")
+    test_get_dataset(1, 100, 30)
+
+    # Test GET /dataset con un valor de age_days muy grande (devuelve vacío)
+    print("Sin dataset")
+    test_get_dataset(1, 100, 100000)
+
+    # Test GET /dataset con un valor de age_days inválido
+    print("Incorrecto")
+    test_get_dataset(1, 100, -1)
 
     print("\nTEST POST /dataset")
     # Test POST /dataset correcto
