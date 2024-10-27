@@ -7,6 +7,12 @@ import asyncpg
 import os
 from dotenv import load_dotenv
 from typing import List, Optional
+import json
+import boto3
+
+# Crear un cliente de S3
+s3_client = boto3.client("s3")
+bucket_name = 'user-02-smm-ueia-so'
 
 class Dataset(BaseModel):
     url: str
@@ -127,6 +133,13 @@ async def insert_dataset(datasets: List[FullDataset]):
             )
 
         total_records = await app.state.db.fetchval("SELECT COUNT(*) FROM dataset_phishing")
+
+        # Guarda el registro en S3 en formato JSON
+        json_data = dataset.json()
+        object_key = f"datasets/{dataset.url}.json"
+
+            # Subir el JSON a S3
+        s3_client.put_object(Bucket=bucket_name, Key=object_key, Body=json_data)
 
         return {
             "message": f"{len(datasets)} records inserted successfully",
